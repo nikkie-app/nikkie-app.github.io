@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nikkie &mdash; あなたの日記が、一枚の絵画になる。</title>
+  <meta name="description" content="Nikkie（ニッキー）は、日記を書くだけでAIが世界にひとつだけの絵画を生成するアプリです。" />
+  <meta property="og:title" content="Nikkie &mdash; Your diary, painted." />
+  <meta property="og:description" content="日記を書くと、AIがあなただけの絵画を描きます。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Nikkie" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #1A1A1A;
+      --bg-elevated: #222222;
+      --bg-card: #252525;
+      --text-primary: #F0F0F0;
+      --text-secondary: #BBBBBB;
+      --text-muted: #777777;
+      --accent: #7B8FFF;
+      --accent-warm: #FFB07B;
+      --border: #333333;
+      --gradient-start: #6B9FFF;
+      --gradient-end: #A06BFF;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-secondary);
+      font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ===== Utility ===== */
+    .serif { font-family: "Playfair Display", "Georgia", serif; }
+
+    /* ===== Animations ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes brushStroke {
+      0%   { width: 0; opacity: 0; }
+      50%  { opacity: 1; }
+      100% { width: 100%; opacity: 1; }
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.8s ease-out both;
+    }
+    .animate-fade-in {
+      animation: fadeIn 1s ease-out both;
+    }
+    .delay-1 { animation-delay: 0.15s; }
+    .delay-2 { animation-delay: 0.3s; }
+    .delay-3 { animation-delay: 0.45s; }
+    .delay-4 { animation-delay: 0.6s; }
+    .delay-5 { animation-delay: 0.75s; }
+    .delay-6 { animation-delay: 0.9s; }
+
+    /* ===== Layout ===== */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(107, 159, 255, 0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(160, 107, 255, 0.05) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, rgba(255, 176, 123, 0.03) 0%, transparent 40%);
+      animation: gradientShift 20s ease infinite;
+      background-size: 200% 200%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+    }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      animation: fadeIn 1s ease-out both;
+    }
+
+    .hero-title {
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .hero-title .serif {
+      font-weight: 400;
+      font-style: italic;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(14px, 2.5vw, 18px);
+      color: var(--text-muted);
+      margin-top: 20px;
+      margin-bottom: 12px;
+      animation: fadeInUp 0.8s ease-out 0.35s both;
+    }
+
+    .hero-tagline {
+      font-size: clamp(18px, 3.5vw, 26px);
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease-out 0.5s both;
+    }
+
+    .hero-tagline em {
+      font-style: normal;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* Decorative brush stroke */
+    .brush-stroke {
+      display: block;
+      width: 80px;
+      height: 3px;
+      margin: 0 auto 40px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+      animation: brushStroke 1.2s ease-out 0.6s both;
+    }
+
+    /* Visual mock — floating canvas */
+    .hero-visual {
+      margin: 48px auto 0;
+      max-width: 320px;
+      animation: scaleIn 1s ease-out 0.7s both;
+    }
+
+    .canvas-frame {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .canvas-inner {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 6px;
+      background: linear-gradient(160deg,
+        #2a1f3d 0%,
+        #1e3a5f 25%,
+        #4a2c2a 50%,
+        #2d4a3f 75%,
+        #3d2a4a 100%
+      );
+      background-size: 300% 300%;
+      animation: gradientShift 12s ease infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .canvas-inner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.3) 100%);
+    }
+
+    .canvas-label {
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .canvas-label-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .canvas-label-number {
+      font-size: 12px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    /* ===== Section Header ===== */
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== How It Works ===== */
+    .how-it-works {
+      background: var(--bg-elevated);
+      position: relative;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+      counter-reset: step;
+    }
+
+    .step {
+      text-align: center;
+      padding: 40px 24px;
+      border-radius: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .step-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      background: linear-gradient(135deg, rgba(107,159,255,0.12), rgba(160,107,255,0.12));
+      border: 1px solid rgba(107,159,255,0.2);
+    }
+
+    .step-number {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      font-size: 48px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+    }
+
+    .step h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* Connector arrows between steps (hidden on mobile) */
+    .step-connector {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .steps {
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        align-items: center;
+      }
+      .step-connector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--border);
+        font-size: 20px;
+      }
+    }
+
+    /* ===== Features ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      padding: 32px 28px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(107,159,255,0.3);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ===== Concept Section ===== */
+    .concept {
+      text-align: center;
+      background: var(--bg-elevated);
+    }
+
+    .concept-text {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: clamp(16px, 2.5vw, 20px);
+      line-height: 2;
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
+
+    .concept-text em {
+      font-style: normal;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .concept-divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+      margin: 32px auto;
+      border-radius: 1px;
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      text-align: center;
+      padding: 100px 24px;
+      position: relative;
+    }
+
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(107,159,255,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .cta-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+
+    .store-badges {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 500;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .store-badge:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(107,159,255,0.15);
+      text-decoration: none;
+    }
+
+    .store-badge svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .store-badge-text {
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    .store-badge-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      display: block;
+      font-weight: 400;
+    }
+
+    .coming-soon {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 20px;
+      position: relative;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    .footer-brand {
+      font-size: 13px;
+      color: #444;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== Scroll-triggered animations ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      section {
+        padding: 56px 0;
+      }
+
+      .hero {
+        min-height: 100svh;
+        padding: 48px 20px;
+      }
+
+      .steps {
+        gap: 20px;
+      }
+
+      .step {
+        padding: 28px 20px;
+      }
+
+      .features-grid {
+        gap: 16px;
+      }
+
+      .feature-card {
+        padding: 24px 20px;
+      }
+
+      .store-badges {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .store-badge {
+        width: 100%;
+        max-width: 260px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow animate-fade-in">Diary &times; AI Art</div>
+      <h1 class="hero-title">
+        <span class="serif">Nikkie</span>
+      </h1>
+      <p class="hero-subtitle">&#x30CB;&#x30C3;&#x30AD;&#x30FC;</p>
+      <p class="hero-tagline">
+        &#x3042;&#x306A;&#x305F;&#x306E;&#x65E5;&#x8A18;&#x304C;&#x3001;<em>&#x4E00;&#x679A;&#x306E;&#x7D75;&#x753B;</em>&#x306B;&#x306A;&#x308B;&#x3002;
+      </p>
+      <span class="brush-stroke"></span>
+
+      <div class="hero-visual">
+        <div class="canvas-frame">
+          <div class="canvas-inner"></div>
+          <div class="canvas-label">
+            <div class="canvas-label-title">Untitled #1</div>
+            <div class="canvas-label-number">&#x300C;&#x4ECA;&#x65E5;&#x306E;&#x65E5;&#x8A18;&#x300D;&#x304B;&#x3089;&#x751F;&#x307E;&#x308C;&#x305F;&#x4E00;&#x679A;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Concept ===== -->
+  <section class="concept">
+    <div class="container">
+      <div class="reveal">
+        <p class="concept-text">
+          &#x6BCE;&#x65E5;&#x66F8;&#x304F;&#x65E5;&#x8A18;&#x3002;&#x305D;&#x306E;&#x4E00;&#x3064;&#x3072;&#x3068;&#x3064;&#x306E;&#x8A00;&#x8449;&#x304B;&#x3089;&#x3001;<br>
+          AI&#x304C;<em>&#x4E16;&#x754C;&#x306B;&#x3072;&#x3068;&#x3064;&#x3060;&#x3051;&#x306E;&#x30A2;&#x30FC;&#x30C8;</em>&#x3092;&#x63CF;&#x304D;&#x51FA;&#x3057;&#x307E;&#x3059;&#x3002;
+        </p>
+        <div class="concept-divider"></div>
+        <p class="concept-text" style="font-size: clamp(14px, 2vw, 16px); color: var(--text-muted);">
+          &#x5618;&#x3082;&#x559C;&#x3073;&#x3082;&#x3001;&#x4F55;&#x6C17;&#x306A;&#x3044;&#x4E00;&#x65E5;&#x3082;&#x3002;<br>
+          &#x3059;&#x3079;&#x3066;&#x304C;&#x3001;&#x3042;&#x306A;&#x305F;&#x3060;&#x3051;&#x306E;&#x30AE;&#x30E3;&#x30E9;&#x30EA;&#x30FC;&#x306B;&#x306A;&#x308B;&#x3002;
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== How It Works ===== -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">&#x304B;&#x3093;&#x305F;&#x3093;&#xFF13;&#x30B9;&#x30C6;&#x30C3;&#x30D7;</h2>
+        <p class="section-desc">&#x65E5;&#x8A18;&#x3092;&#x66F8;&#x304F;&#x3060;&#x3051;&#x3002;&#x305D;&#x308C;&#x3060;&#x3051;&#x3067;&#x3001;&#x30A2;&#x30FC;&#x30C8;&#x304C;&#x751F;&#x307E;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-number">1</div>
+          <div class="step-icon">&#x270D;&#xFE0F;</div>
+          <h3>&#x65E5;&#x8A18;&#x3092;&#x66F8;&#x304F;</h3>
+          <p>&#x4ECA;&#x65E5;&#x3042;&#x3063;&#x305F;&#x3053;&#x3068;&#x3001;&#x611F;&#x3058;&#x305F;&#x3053;&#x3068;&#x3092;&#x81EA;&#x7531;&#x306B;&#x66F8;&#x304D;&#x307E;&#x3057;&#x3087;&#x3046;&#x3002;&#x9577;&#x3055;&#x3082;&#x5F62;&#x5F0F;&#x3082;&#x81EA;&#x7531;&#x3067;&#x3059;&#x3002;</p>
+        </div>
+
+        <div class="step-connector reveal">&#x2192;</div>
+
+        <div class="step reveal delay-2">
+          <div class="step-number">2</div>
+          <div class="step-icon">&#x1F3A8;</div>
+          <h3>AI&#x304C;&#x7D75;&#x3092;&#x63CF;&#x304F;</h3>
+          <p>&#x3042;&#x306A;&#x305F;&#x306E;&#x8A00;&#x8449;&#x304B;&#x3089;&#x3001;AI&#x304C;&#x552F;&#x4E00;&#x7121;&#x4E8C;&#x306E;&#x30A2;&#x30FC;&#x30C8;&#x30EF;&#x30FC;&#x30AF;&#x3092;&#x751F;&#x6210;&#x3057;&#x307E;&#x3059;&#x3002;</p>
+        </div>
+
+        <div class="step-connector reveal">&#x2192;</div>
+
+        <div class="step reveal delay-4">
+          <div class="step-number">3</div>
+          <div class="step-icon">&#x1F5BC;&#xFE0F;</div>
+          <h3>&#x30AE;&#x30E3;&#x30E9;&#x30EA;&#x30FC;&#x306B;&#x98FE;&#x308B;</h3>
+          <p>&#x751F;&#x307E;&#x308C;&#x305F;&#x7D75;&#x753B;&#x306F;&#x3001;&#x3042;&#x306A;&#x305F;&#x3060;&#x3051;&#x306E;&#x30AE;&#x30E3;&#x30E9;&#x30EA;&#x30FC;&#x306B;&#x30B3;&#x30EC;&#x30AF;&#x30B7;&#x30E7;&#x30F3;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features ===== -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Nikkie&#x306E;&#x7279;&#x5FB4;</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <span class="feature-icon">&#x1F307;</span>
+          <h3>&#x6BCE;&#x65E5;&#x304C;&#x30A2;&#x30FC;&#x30C8;&#x306B;&#x306A;&#x308B;</h3>
+          <p>1&#x65E5;1&#x679A;&#x3001;&#x65E5;&#x8A18;&#x304B;&#x3089;&#x751F;&#x307E;&#x308C;&#x308B;&#x30AA;&#x30EA;&#x30B8;&#x30CA;&#x30EB;&#x30A2;&#x30FC;&#x30C8;&#x3002;&#x540C;&#x3058;&#x65E5;&#x8A18;&#x3067;&#x3082;&#x3001;&#x540C;&#x3058;&#x7D75;&#x306F;&#x4E8C;&#x5EA6;&#x3068;&#x751F;&#x307E;&#x308C;&#x307E;&#x305B;&#x3093;&#x3002;&#x305D;&#x306E;&#x4E00;&#x671F;&#x4E00;&#x4F1A;&#x3092;&#x304A;&#x697D;&#x3057;&#x307F;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;</p>
+        </div>
+
+        <div class="feature-card reveal delay-1">
+          <span class="feature-icon">&#x1F48C;</span>
+          <h3>&#x53CB;&#x3060;&#x3061;&#x306B;&#x30B7;&#x30A7;&#x30A2;</h3>
+          <p>&#x304A;&#x6C17;&#x306B;&#x5165;&#x308A;&#x306E;&#x4F5C;&#x54C1;&#x3092;SNS&#x3084;&#x30E1;&#x30C3;&#x30BB;&#x30FC;&#x30B8;&#x3067;&#x7C21;&#x5358;&#x306B;&#x30B7;&#x30A7;&#x30A2;&#x3002;&#x3042;&#x306A;&#x305F;&#x306E;&#x65E5;&#x8A18;&#x304C;&#x3001;&#x8AB0;&#x304B;&#x306E;&#x5FC3;&#x306B;&#x5C4A;&#x304F;&#x304B;&#x3082;&#x3057;&#x308C;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+        </div>
+
+        <div class="feature-card reveal delay-2">
+          <span class="feature-icon">&#x1F9D0;</span>
+          <h3>&#x30AD;&#x30E5;&#x30EC;&#x30FC;&#x30BF;&#x30FC;&#x30BA;&#x30CE;&#x30FC;&#x30C8;</h3>
+          <p>AI&#x304C;&#x3042;&#x306A;&#x305F;&#x306E;&#x4F5C;&#x54C1;&#x306B;&#x5BFE;&#x3057;&#x3066;&#x3001;&#x7F8E;&#x8853;&#x9928;&#x306E;&#x30AD;&#x30E5;&#x30EC;&#x30FC;&#x30BF;&#x30FC;&#x306E;&#x3088;&#x3046;&#x306B;&#x89E3;&#x8AAC;&#x6587;&#x3092;&#x6DFB;&#x3048;&#x307E;&#x3059;&#x3002;&#x81EA;&#x5206;&#x306E;&#x65E5;&#x8A18;&#x304C;&#x3001;&#x65B0;&#x305F;&#x306A;&#x8996;&#x70B9;&#x3067;&#x898B;&#x3048;&#x3066;&#x304D;&#x307E;&#x3059;&#x3002;</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <div class="container">
+      <div class="reveal">
+        <h2 class="cta-title">&#x3055;&#x3042;&#x3001;&#x6700;&#x521D;&#x306E;&#x4E00;&#x679A;&#x3092;&#x63CF;&#x3053;&#x3046;&#x3002;</h2>
+        <p class="cta-desc">&#x65E5;&#x8A18;&#x3092;&#x66F8;&#x304F;&#x3060;&#x3051;&#x3067;&#x3001;&#x3042;&#x306A;&#x305F;&#x3060;&#x3051;&#x306E;&#x30A2;&#x30FC;&#x30C8;&#x304C;&#x751F;&#x307E;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+
+        <div class="store-badges">
+          <a href="#" class="store-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            <div class="store-badge-text">
+              <span class="store-badge-label">Download on the</span>
+              App Store
+            </div>
+          </a>
+
+          <a href="#" class="store-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.6l2.426 1.404c.68.394.68 1.384 0 1.778l-2.13 1.233-2.544-2.544 2.248-1.871zM5.864 2.658L16.8 8.99l-2.302 2.302-8.635-8.635z"/>
+            </svg>
+            <div class="store-badge-text">
+              <span class="store-badge-label">GET IT ON</span>
+              Google Play
+            </div>
+          </a>
+        </div>
+
+        <p class="coming-soon">&#x8FD1;&#x65E5;&#x516C;&#x958B;&#x4E88;&#x5B9A;</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://wgzeaunhhhsxyzrjtdxf.supabase.co/functions/v1/legal?page=privacy">&#x30D7;&#x30E9;&#x30A4;&#x30D0;&#x30B7;&#x30FC;&#x30DD;&#x30EA;&#x30B7;&#x30FC;</a>
+        <a href="https://wgzeaunhhhsxyzrjtdxf.supabase.co/functions/v1/legal?page=terms">&#x5229;&#x7528;&#x898F;&#x7D04;</a>
+      </div>
+      <div class="footer-brand">Nikkie&#xFF08;&#x30CB;&#x30C3;&#x30AD;&#x30FC;&#xFF09;&mdash; Your diary, painted.</div>
+    </div>
+  </footer>
+
+  <!-- ===== Scroll reveal ===== -->
+  <script>
+    (function() {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function(el) { el.classList.add('visible'); });
+        return;
+      }
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(function(el) { observer.observe(el); });
+    })();
+  </script>
+</body>
+</html>
