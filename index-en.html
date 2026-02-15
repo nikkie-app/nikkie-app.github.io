@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nikkie &mdash; あなたの日記が、一枚の絵画になる。</title>
-  <meta name="description" content="Nikkie（ニッキー）は、日記を書くだけでAIが世界にひとつだけの絵画を生成するアプリです。" />
+  <title>Nikkie &mdash; Your diary becomes a painting.</title>
+  <meta name="description" content="Nikkie turns your daily diary into one-of-a-kind AI-generated artwork. Write your feelings. AI paints them." />
   <meta property="og:title" content="Nikkie &mdash; Your diary, painted." />
-  <meta property="og:description" content="日記を書くと、AIがあなただけの絵画を描きます。" />
+  <meta property="og:description" content="Write your diary. AI paints a unique artwork just for you." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Nikkie" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     /* ===== Reset & Base ===== */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,7 +38,7 @@
     body {
       background: var(--bg);
       color: var(--text-secondary);
-      font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.8;
       overflow-x: hidden;
     }
@@ -227,7 +227,7 @@
       animation: brushStroke 1.2s ease-out 0.6s both;
     }
 
-    /* Visual mock — floating canvas */
+    /* Visual mock -- floating canvas */
     .hero-visual {
       margin: 48px auto 0;
       max-width: 320px;
@@ -666,9 +666,9 @@
   <!-- ===== Hero ===== -->
   <section class="hero">
     <div class="lang-switcher">
-      <a href="index.html" class="active">&#x65E5;&#x672C;&#x8A9E;</a>
+      <a href="index.html">&#x65E5;&#x672C;&#x8A9E;</a>
       <span>|</span>
-      <a href="index-en.html">English</a>
+      <a href="index-en.html" class="active">English</a>
     </div>
 
     <div class="hero-content">
@@ -676,9 +676,9 @@
       <h1 class="hero-title">
         <span class="serif">Nikkie</span>
       </h1>
-      <p class="hero-subtitle">&#x30CB;&#x30C3;&#x30AD;&#x30FC;</p>
+      <p class="hero-subtitle">Your diary becomes a painting.</p>
       <p class="hero-tagline">
-        &#x3042;&#x306A;&#x305F;&#x306E;&#x65E5;&#x8A18;&#x304C;&#x3001;<em>&#x4E00;&#x679A;&#x306E;&#x7D75;&#x753B;</em>&#x306B;&#x306A;&#x308B;&#x3002;
+        Write your feelings. <em>AI paints them.</em>
       </p>
       <span class="brush-stroke"></span>
 
@@ -687,7 +687,7 @@
           <div class="canvas-inner"></div>
           <div class="canvas-label">
             <div class="canvas-label-title">Untitled #1</div>
-            <div class="canvas-label-number">&#x300C;&#x4ECA;&#x65E5;&#x306E;&#x65E5;&#x8A18;&#x300D;&#x304B;&#x3089;&#x751F;&#x307E;&#x308C;&#x305F;&#x4E00;&#x679A;</div>
+            <div class="canvas-label-number">Born from today's diary</div>
           </div>
         </div>
       </div>
@@ -699,13 +699,13 @@
     <div class="container">
       <div class="reveal">
         <p class="concept-text">
-          &#x6BCE;&#x65E5;&#x66F8;&#x304F;&#x65E5;&#x8A18;&#x3002;&#x305D;&#x306E;&#x4E00;&#x3064;&#x3072;&#x3068;&#x3064;&#x306E;&#x8A00;&#x8449;&#x304B;&#x3089;&#x3001;<br>
-          AI&#x304C;<em>&#x4E16;&#x754C;&#x306B;&#x3072;&#x3068;&#x3064;&#x3060;&#x3051;&#x306E;&#x30A2;&#x30FC;&#x30C8;</em>&#x3092;&#x63CF;&#x304D;&#x51FA;&#x3057;&#x307E;&#x3059;&#x3002;
+          Every word you write in your diary,<br>
+          AI transforms into <em>a one-of-a-kind work of art</em>.
         </p>
         <div class="concept-divider"></div>
         <p class="concept-text" style="font-size: clamp(14px, 2vw, 16px); color: var(--text-muted);">
-          &#x5618;&#x3082;&#x559C;&#x3073;&#x3082;&#x3001;&#x4F55;&#x6C17;&#x306A;&#x3044;&#x4E00;&#x65E5;&#x3082;&#x3002;<br>
-          &#x3059;&#x3079;&#x3066;&#x304C;&#x3001;&#x3042;&#x306A;&#x305F;&#x3060;&#x3051;&#x306E;&#x30AE;&#x30E3;&#x30E9;&#x30EA;&#x30FC;&#x306B;&#x306A;&#x308B;&#x3002;
+          The joy, the sorrow, the quiet ordinary days.<br>
+          They all become your own personal gallery.
         </p>
       </div>
     </div>
@@ -716,16 +716,16 @@
     <div class="container">
       <div class="section-header reveal">
         <div class="section-label">How It Works</div>
-        <h2 class="section-title">&#x304B;&#x3093;&#x305F;&#x3093;&#xFF13;&#x30B9;&#x30C6;&#x30C3;&#x30D7;</h2>
-        <p class="section-desc">&#x65E5;&#x8A18;&#x3092;&#x66F8;&#x304F;&#x3060;&#x3051;&#x3002;&#x305D;&#x308C;&#x3060;&#x3051;&#x3067;&#x3001;&#x30A2;&#x30FC;&#x30C8;&#x304C;&#x751F;&#x307E;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+        <h2 class="section-title">Three simple steps</h2>
+        <p class="section-desc">Just write your diary. That's all it takes to create art.</p>
       </div>
 
       <div class="steps">
         <div class="step reveal">
           <div class="step-number">1</div>
           <div class="step-icon">&#x270D;&#xFE0F;</div>
-          <h3>&#x65E5;&#x8A18;&#x3092;&#x66F8;&#x304F;</h3>
-          <p>&#x4ECA;&#x65E5;&#x3042;&#x3063;&#x305F;&#x3053;&#x3068;&#x3001;&#x611F;&#x3058;&#x305F;&#x3053;&#x3068;&#x3092;&#x81EA;&#x7531;&#x306B;&#x66F8;&#x304D;&#x307E;&#x3057;&#x3087;&#x3046;&#x3002;&#x9577;&#x3055;&#x3082;&#x5F62;&#x5F0F;&#x3082;&#x81EA;&#x7531;&#x3067;&#x3059;&#x3002;</p>
+          <h3>Write your diary</h3>
+          <p>Jot down what happened today, how you felt. Any length, any style &mdash; completely free-form.</p>
         </div>
 
         <div class="step-connector reveal">&#x2192;</div>
@@ -733,8 +733,8 @@
         <div class="step reveal delay-2">
           <div class="step-number">2</div>
           <div class="step-icon">&#x1F3A8;</div>
-          <h3>AI&#x304C;&#x7D75;&#x3092;&#x63CF;&#x304F;</h3>
-          <p>&#x3042;&#x306A;&#x305F;&#x306E;&#x8A00;&#x8449;&#x304B;&#x3089;&#x3001;AI&#x304C;&#x552F;&#x4E00;&#x7121;&#x4E8C;&#x306E;&#x30A2;&#x30FC;&#x30C8;&#x30EF;&#x30FC;&#x30AF;&#x3092;&#x751F;&#x6210;&#x3057;&#x307E;&#x3059;&#x3002;</p>
+          <h3>AI creates a painting</h3>
+          <p>From your words, AI generates a truly unique artwork that captures the emotion of your day.</p>
         </div>
 
         <div class="step-connector reveal">&#x2192;</div>
@@ -742,8 +742,8 @@
         <div class="step reveal delay-4">
           <div class="step-number">3</div>
           <div class="step-icon">&#x1F5BC;&#xFE0F;</div>
-          <h3>&#x30AE;&#x30E3;&#x30E9;&#x30EA;&#x30FC;&#x306B;&#x98FE;&#x308B;</h3>
-          <p>&#x751F;&#x307E;&#x308C;&#x305F;&#x7D75;&#x753B;&#x306F;&#x3001;&#x3042;&#x306A;&#x305F;&#x3060;&#x3051;&#x306E;&#x30AE;&#x30E3;&#x30E9;&#x30EA;&#x30FC;&#x306B;&#x30B3;&#x30EC;&#x30AF;&#x30B7;&#x30E7;&#x30F3;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+          <h3>Collect in your gallery</h3>
+          <p>Every painting is saved to your personal gallery &mdash; a growing collection of your life in art.</p>
         </div>
       </div>
     </div>
@@ -754,26 +754,26 @@
     <div class="container">
       <div class="section-header reveal">
         <div class="section-label">Features</div>
-        <h2 class="section-title">Nikkie&#x306E;&#x7279;&#x5FB4;</h2>
+        <h2 class="section-title">What makes Nikkie special</h2>
       </div>
 
       <div class="features-grid">
         <div class="feature-card reveal">
           <span class="feature-icon">&#x1F307;</span>
-          <h3>&#x6BCE;&#x65E5;&#x304C;&#x30A2;&#x30FC;&#x30C8;&#x306B;&#x306A;&#x308B;</h3>
-          <p>1&#x65E5;1&#x679A;&#x3001;&#x65E5;&#x8A18;&#x304B;&#x3089;&#x751F;&#x307E;&#x308C;&#x308B;&#x30AA;&#x30EA;&#x30B8;&#x30CA;&#x30EB;&#x30A2;&#x30FC;&#x30C8;&#x3002;&#x540C;&#x3058;&#x65E5;&#x8A18;&#x3067;&#x3082;&#x3001;&#x540C;&#x3058;&#x7D75;&#x306F;&#x4E8C;&#x5EA6;&#x3068;&#x751F;&#x307E;&#x308C;&#x307E;&#x305B;&#x3093;&#x3002;&#x305D;&#x306E;&#x4E00;&#x671F;&#x4E00;&#x4F1A;&#x3092;&#x304A;&#x697D;&#x3057;&#x307F;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;</p>
+          <h3>Every day becomes art</h3>
+          <p>One diary, one painting, every day. Even the same words will never produce the same artwork twice. Each piece is a once-in-a-lifetime creation.</p>
         </div>
 
         <div class="feature-card reveal delay-1">
           <span class="feature-icon">&#x1F48C;</span>
-          <h3>&#x53CB;&#x3060;&#x3061;&#x306B;&#x30B7;&#x30A7;&#x30A2;</h3>
-          <p>&#x304A;&#x6C17;&#x306B;&#x5165;&#x308A;&#x306E;&#x4F5C;&#x54C1;&#x3092;SNS&#x3084;&#x30E1;&#x30C3;&#x30BB;&#x30FC;&#x30B8;&#x3067;&#x7C21;&#x5358;&#x306B;&#x30B7;&#x30A7;&#x30A2;&#x3002;&#x3042;&#x306A;&#x305F;&#x306E;&#x65E5;&#x8A18;&#x304C;&#x3001;&#x8AB0;&#x304B;&#x306E;&#x5FC3;&#x306B;&#x5C4A;&#x304F;&#x304B;&#x3082;&#x3057;&#x308C;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+          <h3>Share with friends</h3>
+          <p>Easily share your favorite pieces on social media or via messages. Your diary might just touch someone else's heart.</p>
         </div>
 
         <div class="feature-card reveal delay-2">
           <span class="feature-icon">&#x1F9D0;</span>
-          <h3>&#x30AD;&#x30E5;&#x30EC;&#x30FC;&#x30BF;&#x30FC;&#x30BA;&#x30CE;&#x30FC;&#x30C8;</h3>
-          <p>AI&#x304C;&#x3042;&#x306A;&#x305F;&#x306E;&#x4F5C;&#x54C1;&#x306B;&#x5BFE;&#x3057;&#x3066;&#x3001;&#x7F8E;&#x8853;&#x9928;&#x306E;&#x30AD;&#x30E5;&#x30EC;&#x30FC;&#x30BF;&#x30FC;&#x306E;&#x3088;&#x3046;&#x306B;&#x89E3;&#x8AAC;&#x6587;&#x3092;&#x6DFB;&#x3048;&#x307E;&#x3059;&#x3002;&#x81EA;&#x5206;&#x306E;&#x65E5;&#x8A18;&#x304C;&#x3001;&#x65B0;&#x305F;&#x306A;&#x8996;&#x70B9;&#x3067;&#x898B;&#x3048;&#x3066;&#x304D;&#x307E;&#x3059;&#x3002;</p>
+          <h3>Curator's notes</h3>
+          <p>AI writes a museum-style commentary for each of your artworks, offering a fresh perspective on your own diary entry.</p>
         </div>
       </div>
     </div>
@@ -783,8 +783,8 @@
   <section class="cta">
     <div class="container">
       <div class="reveal">
-        <h2 class="cta-title">&#x3055;&#x3042;&#x3001;&#x6700;&#x521D;&#x306E;&#x4E00;&#x679A;&#x3092;&#x63CF;&#x3053;&#x3046;&#x3002;</h2>
-        <p class="cta-desc">&#x65E5;&#x8A18;&#x3092;&#x66F8;&#x304F;&#x3060;&#x3051;&#x3067;&#x3001;&#x3042;&#x306A;&#x305F;&#x3060;&#x3051;&#x306E;&#x30A2;&#x30FC;&#x30C8;&#x304C;&#x751F;&#x307E;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+        <h2 class="cta-title">Paint your first masterpiece.</h2>
+        <p class="cta-desc">Just write your diary &mdash; AI will create a work of art that's uniquely yours.</p>
 
         <div class="store-badges">
           <a href="#" class="store-badge">
@@ -808,7 +808,7 @@
           </a>
         </div>
 
-        <p class="coming-soon">&#x8FD1;&#x65E5;&#x516C;&#x958B;&#x4E88;&#x5B9A;</p>
+        <p class="coming-soon">Coming soon</p>
       </div>
     </div>
   </section>
@@ -817,10 +817,10 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-links">
-        <a href="https://wgzeaunhhhsxyzrjtdxf.supabase.co/functions/v1/legal?page=privacy">&#x30D7;&#x30E9;&#x30A4;&#x30D0;&#x30B7;&#x30FC;&#x30DD;&#x30EA;&#x30B7;&#x30FC;</a>
-        <a href="https://wgzeaunhhhsxyzrjtdxf.supabase.co/functions/v1/legal?page=terms">&#x5229;&#x7528;&#x898F;&#x7D04;</a>
+        <a href="privacy-en.html">Privacy Policy</a>
+        <a href="terms-en.html">Terms of Service</a>
       </div>
-      <div class="footer-brand">Nikkie&#xFF08;&#x30CB;&#x30C3;&#x30AD;&#x30FC;&#xFF09;&mdash; Your diary, painted.</div>
+      <div class="footer-brand">Nikkie &mdash; Your diary, painted.</div>
     </div>
   </footer>
 
